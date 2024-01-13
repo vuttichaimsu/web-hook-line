@@ -13,17 +13,25 @@ app.use(
 app.use(bodyParser.json());
 
 app.post("/webhook", function (req, res) {
-    let userId = "";
-    if (req.body.events[0].source.groupId != undefined) {
-        userId = req.body.events[0].source.groupId;
-    } else {
-        userId = req.body.events[0].source.userId;
-    }
-    let formatMessage = {
-        type: "text",
-        text: JSON.stringify(req.body)
-    };
-    reply(userId, formatMessage);
+    let userId = req.body.events[0].source.userId;
+    let userMessage = req.body.events[0].message.text;
+    
+    const header = {
+    'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+let url = `https://dailydose365.net/updateUID.php`
+const jsonData = {
+    userId: userId,
+    tel: userMessage
+}
+axios
+    .get(`${url}?userId=${jsonData.userId}&tel=${jsonData.tel}`, { headers: header })
+    .then((resp) => {
+        console.log(resp.data);
+    })
+    .catch((error) => console.log("Error :", error));
+    
     res.sendStatus(200);
 });
 
