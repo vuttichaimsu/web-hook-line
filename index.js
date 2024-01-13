@@ -33,7 +33,7 @@ axios
         if(resultText.statusCode===200){
             let formatMessage = {
                 type: "text",
-                text: "ยืนยันการลงทะเบียนเพื่อรับบริการแจ้งเตือนบนไลน์"
+                text: "ยืนยันการลงทะเบียนเพื่อรับบริการแจ้งเตือนบนไลน์เรียบร้อยแล้ว"
             };
            reply(userId, formatMessage);
         }
