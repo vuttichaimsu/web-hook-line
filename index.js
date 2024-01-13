@@ -28,7 +28,15 @@ const jsonData = {
 axios
     .get(`${url}?userId=${jsonData.userId}&tel=${jsonData.tel}`, { headers: header })
     .then((resp) => {
-        console.log(resp.data);
+        //console.log(resp.data);
+        const resultText=resp.data
+        if(resultText.statusCode===200){
+            let formatMessage = {
+                type: "text",
+                text: "ยืนยันการลงทะเบียนเพื่อรับบริการแจ้งเตือนบนไลน์"
+            };
+           reply(userId, formatMessage);
+        }
     })
     .catch((error) => console.log("Error :", error));
     
