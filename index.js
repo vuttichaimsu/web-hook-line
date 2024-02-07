@@ -2,7 +2,18 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const axios = require("axios");
 const moment = require("moment");
+const Agent = require("agentkeepalive").HttpsAgent;
+
+const agentkeepalive = new Agent({
+    timeout: 60000,
+    freeSocketTimeout: 30000,
+});
+
+axios.create({
+    httpsAgent: agentkeepalive,
+});
 moment.locale("th");
+
 const app = express();
 app.use(
     bodyParser.urlencoded({
