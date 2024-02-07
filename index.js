@@ -22,8 +22,8 @@ app.post("/body", function (req, res) {
 });
 
 app.post("/webhook", function (req, res) {
-    let userId = req.body.events[0]?.source.userId;
-    let userMessage = req.body.events[0]?.message.text;
+    let userId = req.body.events[0].source.userId;
+    let userMessage = req.body.events[0].message.text;
 
     const header = {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -44,9 +44,21 @@ app.post("/webhook", function (req, res) {
                     text: "ยืนยันการลงทะเบียนเพื่อรับบริการแจ้งเตือนบนไลน์เรียบร้อยแล้ว"
                 };
                 reply(userId, formatMessage);
+            } else {
+                let formatMessage = {
+                    type: "text",
+                    text: JSON.stringify(resp)
+                };
+                reply(userId, formatMessage);
             }
         })
-        .catch((error) => console.log("Error :", error));
+        .catch((error) => {
+            let formatMessage = {
+                type: "text",
+                text: JSON.stringify(error)
+            };
+            reply(userId, formatMessage);
+        });
     res.sendStatus(200);
 });
 
