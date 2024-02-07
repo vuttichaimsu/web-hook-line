@@ -37,6 +37,7 @@ app.post("/webhook", function (req, res) {
     axios
         .get(`${url}?userId=${jsonData.userId}&tel=${jsonData.tel}`, { headers: header })
         .then((resp) => {
+            console.log(resp)
             const responeData = Number(resp.data)
             if (responeData === 1) {
                 let formatMessage = {
@@ -53,6 +54,7 @@ app.post("/webhook", function (req, res) {
             }
         })
         .catch((error) => {
+            console.log(error)
             let formatMessage = {
                 type: "text",
                 text: JSON.stringify(error)
