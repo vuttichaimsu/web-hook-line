@@ -11,6 +11,16 @@ app.use(
 );
 app.use(bodyParser.json());
 
+app.post("/body", function (req, res) {
+  let userId = req.body.events[0].source.userId;
+  let formatMessage = {
+    type: "text",
+    text: JSON.stringify(req.body),
+  };
+  reply(userId, formatMessage);
+  res.sendStatus(200);
+});
+
 app.post("/webhook", function (req, res) {
     let userId = req.body.events[0]?.source.userId;
     let userMessage = req.body.events[0]?.message.text;
