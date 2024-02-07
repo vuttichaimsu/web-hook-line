@@ -14,32 +14,38 @@ app.use(bodyParser.json());
 
 app.post("/webhook", function (req, res) {
     let userId = req.body.events[0]?.source.userId;
-    let userMessage = req.body.events[0].message.text;
-    
-    const header = {
-    'Content-Type': 'application/x-www-form-urlencoded'
-};
+    let userMessage = req.body.events[0]?.message.text;
 
-let url = `https://dailydose365.net/updateUID.php`
-const jsonData = {
-    userId: userId,
-    tel: userMessage
-}
-axios
-    .get(`${url}?userId=${jsonData.userId}&tel=${jsonData.tel}`, { headers: header })
-    .then((resp) => {
-        //console.log(resp.data);
-        const resultText=resp.data
-        if(resultText.statusCode===200){
-            let formatMessage = {
-                type: "text",
-                text: "ยืนยันการลงทะเบียนเพื่อรับบริการแจ้งเตือนบนไลน์เรียบร้อยแล้ว"
-            };
-           reply(userId, formatMessage);
-        }
-    })
-    .catch((error) => console.log("Error :", error));
-    
+    const header = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    };
+
+    let url = `https://dailydose365.net/updateUID.php`
+    const jsonData = {
+        userId: userId,
+        tel: userMessage
+    }
+    axios
+        .get(`${url}?userId=${jsonData.userId}&tel=${jsonData.tel}`, { headers: header })
+        .then((resp) => {
+            console.log(resp.data);
+            const resultText = resp.data
+            if (resultText.statusCode === 200) {
+                let formatMessage = {
+                    type: "text",
+                    text: "ยืนยันการลงทะเบียนเพื่อรับบริการแจ้งเตือนบนไลน์เรียบร้อยแล้ว"
+                };
+                reply(userId, formatMessage);
+            } else {
+                let formatMessage = {
+                    type: "text",
+                    text: JSON.stringify(resp.data)
+                };
+                reply(userId, formatMessage);
+            }
+        })
+        .catch((error) => console.log("Error :", error));
+
     res.sendStatus(200);
 });
 
